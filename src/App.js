@@ -61,14 +61,18 @@ function App() {
   }
   const undo=()=>{
      const present_state=elements;
+    // console.log(elements);
      if(present_state.length>0)
      {
       present_state.pop();
      }
 
-     setelements(present_state);
-    
+      //console.log(present_state);
+      clear();
 
+     setelements(present_state);
+    reRender();
+     
      Ctx.strokeRect('0','0','2','2');
   }
 
@@ -210,10 +214,10 @@ function App() {
   // calls each time when layout changes
   useEffect( ()=>{
     
-   const canvas=document.getElementById("whiteboard");
+    const canvas=document.getElementById("whiteboard");
     const context=canvas.getContext('2d');
     setContext(context);
-context.clearRect(0,0,window.innerWidth,window.innerHeight);
+    context.clearRect(0,0,window.innerWidth,window.innerHeight);
     elements.forEach((element)=>
      {
        draw(element);
@@ -224,12 +228,27 @@ context.clearRect(0,0,window.innerWidth,window.innerHeight);
      }
     );
     
+  },[elements,]);
     
+   
+  function reRender()
+  {
+    const canvas=document.getElementById("whiteboard");
+    const context=canvas.getContext('2d');
+    setContext(context);
+    context.clearRect(0,0,window.innerWidth,window.innerHeight);
+    elements.forEach((element)=>
+     {
+       draw(element);
+      
+      // console.log(elements.length);
+      
+  //  console.log(element);
+     }
+    );
+  }
 
 
-  },[elements]);
-    
-  
   return (
        <div>
           <div className="drawing" style={{position:" fixed"}}>
