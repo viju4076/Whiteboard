@@ -12,8 +12,6 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:4000');
 var context;
 
-var emitedElements=[];   
-var elements=[];
 
 const draw=(element)=>{
   //  console.log(element);
@@ -47,68 +45,49 @@ else if(drawing==="Pen")
    pointarray.map( ({X1,Y1})=>{
      //console.log(X1,Y1);
      
-   Ctx.lineTo(X1,Y1);
-   Ctx.stroke();
+     Ctx.lineTo(X1,Y1);
+     Ctx.stroke();
      
    });
  }
 }
+
+
 
   return ;
 
  }
 
 
- async function updatecanvas(){
-  // setChanged(true);
-   const canvas=document.getElementById("whiteboard");
-   context=canvas.getContext('2d');
-   setContext(context);
-   context.clearRect(0,0,window.innerWidth,window.innerHeight);
-   emitedElements.forEach((element)=>
-   {
-     draw(element);
-    
-   }
 
-  );
-
-
-}
-
-
-
-
-function setelements(array)
-{
-  elements=array;
-}
+var emitedElements=[];   
 
 
 socket.on('draw',(emmitedArray)=>{
-
   console.log("emited array",emmitedArray);
-
-  // emitedElements.forEach((element)=>
-  // {
-  //   context.fillStyle = 'white';
-  //   draw(element);
-  // });
   
   
-  // emitedElements=emmitedArray;
 
-
-  // emitedElements.forEach((element)=>
-  // {
-  //   context.fillStyle = 'black';
-  //   draw(element);
-  // });
+  emitedElements.forEach((element)=>
+  {
+    context.fillStyle = 'white';
+    draw(element);
+  });
+  
   
   emitedElements=emmitedArray;
-  
-  updatecanvas();
+
+
+  emitedElements.forEach((element)=>
+  {
+    context.fillStyle = 'black';
+    draw(element);
+  });
+
+
  
+  
+
 
 });
 
@@ -118,12 +97,15 @@ socket.on('draw',(emmitedArray)=>{
 
 const Board=()=> {
      
+      
+
+
      const [test,setTest]=useState(false);
 
     // setTimeout( setTest(test ^ true), 2000);
 
      const [drawing, setdrawing]=useState("false");
-    // const [elements,setelements]=useState([]);
+     const [elements,setelements]=useState([]);
    
      const [Ctx,setContext]=useState([]);
 
@@ -135,25 +117,25 @@ const Board=()=> {
   
     // const [isChanged,setChanged]=useState(false);
 
-  // async function updatecanvas(){
-  //    // setChanged(true);
-  //     const canvas=document.getElementById("whiteboard");
-  //     context=canvas.getContext('2d');
-  //     setContext(context);
-  //     context.clearRect(0,0,window.innerWidth,window.innerHeight);
+  async function updatecanvas(){
+     // setChanged(true);
+      const canvas=document.getElementById("whiteboard");
+     context=canvas.getContext('2d');
+      setContext(context);
+      context.clearRect(0,0,window.innerWidth,window.innerHeight);
      
-  //    emitedElements.forEach((element)=>
-  //     {
-  //       draw(element);
+     emitedElements.forEach((element)=>
+      {
+        draw(element);
        
-  //      // console.log(elements.length);
+       // console.log(elements.length);
        
-  //  //  console.log(element);
-  //     }
-  //    );
+   //  console.log(element);
+      }
+     );
 
  
-  //  }
+   }
 
     async function updateUndoCanvas(){
 
